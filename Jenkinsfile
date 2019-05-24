@@ -8,10 +8,12 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                sh 'docker-compose -f docker/test.yml up -d'
-                sh 'docker-compose -f docker/test.yml run cp-app-cli php -v'
-                sh 'docker-compose -f docker/test.yml run cp-app-cli composer install'
-                sh 'docker-compose -f docker/test.yml run cp-app-cli ./vendor/bin/codecept run unit,acceptance'
+                wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+                    sh 'docker-compose -f docker/test.yml up -d'
+                    sh 'docker-compose -f docker/test.yml run cp-app-cli php -v'
+                    sh 'docker-compose -f docker/test.yml run cp-app-cli composer install'
+                    sh 'docker-compose -f docker/test.yml run cp-app-cli ./vendor/bin/codecept run unit,acceptance'
+                }
             }
         }
     }
