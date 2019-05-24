@@ -10,6 +10,6 @@ class BazCest
     public function tryToTest(AcceptanceTester $I)
     {
         $I->amOnPage('/');
-        $I->see('it works');
+        $I->see('it works 3344 xx');
     }
 }
