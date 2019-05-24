@@ -1,0 +1,9 @@
+FROM debian:8
+
+RUN apt-get update && apt-get -y install wget apache2 php5 libapache2-mod-php5 php5-mysql php5-apcu php5-curl php5-xdebug
+
+ADD 000-default.conf /etc/apache2/sites-enabled/000-default.conf
+RUN a2enmod rewrite && service apache2 restart
+
+ENTRYPOINT ["/usr/sbin/apache2ctl"]
+CMD ["-D", "FOREGROUND"]
