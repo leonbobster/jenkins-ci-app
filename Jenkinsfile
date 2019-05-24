@@ -6,23 +6,18 @@ pipeline {
         }
     }
     stages {
-        stage('Build') {
-            steps {
-                sh 'cat /etc/*-release'
-                sh 'pwd'
-                sh 'ls -al'
-                sh 'docker build -f docker/Dockerfile-php-cli -t php56_cli .'
-            }
-        }
         stage('Test') {
             steps {
-                sh 'docker run -i --rm --name php56-cli php56_cli php -v'
-                sh 'docker run -i --rm -v `pwd`:/app -w /app --name php56-cli php56_cli composer install'
+                sh 'docker-compose -f docker/test.yml up -d'
+                sh 'docker-compose -f docker/test.yml run cp-app-cli php -v'
+                sh 'docker-compose -f docker/test.yml run cp-app-cli composer install'
+                sh 'docker-compose -f docker/test.yml run cp-app-cli ./vendor/bin/codecept run unit,acceptance'
             }
         }
     }
-    /*post {
+    post {
         always {
+            sh 'docker-compose -f docker/test.yml down'
         }
-    }*/
+    }
 }

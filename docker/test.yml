@@ -5,6 +5,22 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-php-apache
+    container_name: cp_app
+    ports:
+      - "8889:80"
+    volumes:
+      - ../:/var/www/html
+    networks:
+     - cp
+
+  cp-app-cli:
+    build:
+      context: .
+      dockerfile: Dockerfile-php-cli
+    container_name: cp_app_cli
+    working_dir: /app
+    volumes:
+      - ../:/app
     networks:
      - cp
 
